@@ -161,7 +161,7 @@ export default function Portfolio() {
 
             <motion.div variants={fadeInUp} className="max-w-2xl mt-8">
               <p className="font-sans text-xl md:text-2xl text-secondary leading-relaxed">
-                My goal is to build <span className="text-white italic">scalable, intelligent</span> and <span className="text-white italic">explainable AI systems</span> to make complex data processing efficient.
+                Building AI that ships<span className="text-white italic"> RAG systems, MCP integrations,</span> and <span className="text-white italic">production ML APIs</span> to make complex data processing efficient.
               </p>
             </motion.div>
 
@@ -197,11 +197,7 @@ export default function Portfolio() {
             <h2 className="font-mono text-4xl mb-8">About Me</h2>
             <div className="space-y-6 font-sans text-lg text-secondary">
               <p>
-                I am an AI/ML enthusiast with hands-on experience in Machine Learning, Deep Learning, and Generative AI. 
-                I specialize in deploying applications with <span className="text-white">FastAPI, Docker</span>, and modern LLM frameworks like <span className="text-white">LangChain</span>.
-              </p>
-              <p>
-                Currently pursuing B.Tech in IT at <span className="text-white">AISSMS IOIT (SPPU)</span>
+                Third year B.Tech student at AISSMS IOIT (SPPU) building production AI systems with LLMs, RAG architectures, and deployed ML models. Published researcher in medical and agricultural AI, now focused on making AI agents and retrieval systems that solve real-world problems
               </p>
             </div>
           </div>
@@ -223,7 +219,7 @@ export default function Portfolio() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-16">
             <h2 className="font-mono text-5xl md:text-7xl">Projects</h2>
-            <div className="hidden md:block px-6 py-2 bg-pill text-black rounded-full font-mono font-bold">
+            <div className="hidden md:block px-6 py-2 bg-pill text-white rounded-full font-mono font-bold">
               {projects.length} Works
             </div>
           </div>
