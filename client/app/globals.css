@@ -25,3 +25,34 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #A6A6A6; 
 }
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3.5s linear infinite;
+}
+
+.animate-scan {
+  animation: scan 3s ease-in-out infinite;
+}

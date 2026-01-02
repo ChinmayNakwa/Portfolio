@@ -254,9 +254,20 @@ export default function Portfolio() {
                     </>
                   ) : (
                     // Fallback UI if image is missing or empty string
-                    <div className="w-full h-full flex flex-col items-center justify-center text-secondary gap-3">
-                      <div className="w-12 h-12 border-2 border-dashed border-secondary/30 rounded-full animate-spin-slow" />
-                      <span className="font-mono text-sm tracking-widest uppercase">Working on it</span>
+                    <div className="relative w-full h-64 flex flex-col items-center justify-center gap-6 bg-[#1a1a1a] border-b border-accent/50 overflow-hidden">
+                      {/* Rotating dashed ring */}
+                      <div className="relative w-20 h-20">
+                        <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/40 animate-spin-slow" />
+                        <div className="absolute inset-2 rounded-full border border-white/10 animate-pulse" />
+                      </div>
+
+                      {/* Text */}
+                      <p className="font-mono text-xs tracking-[0.35em] text-secondary uppercase">
+                        Working on it
+                      </p>
+
+                      {/* Subtle scanline */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent animate-scan" />
                     </div>
                   )}
                 </div>
