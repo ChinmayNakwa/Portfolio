@@ -33,9 +33,9 @@ const projects = [
   {
     title: "Lung Cancer Detection",
     tags: ["EfficientNetB4", "TensorFlow", "Medical AI"],
-    description: "Transfer learning model achieving 98.4% accuracy in classifying lung tissues, deployed as a REST API on Render.",
-    link: "https://github.com/ChinmayNakwa/Lung_Cancer_Detection",
-    image: "/lung-cancer.png"
+    description: "A full-stack AI-powered lung cancer detection system with online retraining, MLflow experiment tracking, and a human-in-the-loop learning pipeline.",
+    link: "https://github.com/ChinmayNakwa/Lung_Cancer_Detection/tree/ml-pipeline",
+    image: "/lung-cancer.jpg"
   },
   {
     title: "GoRilla",
