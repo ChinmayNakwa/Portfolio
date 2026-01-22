@@ -1,12 +1,25 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import { ArrowRight, Github, Linkedin, Mail, FileText, Globe, Cpu, Award, Users } from "lucide-react";
+import { ArrowRight, Github, Linkedin, Mail, FileText, Globe, Cpu, Award, Users, Briefcase, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Hero3D from "./components/hero/Hero3D";
+import { useEffect, useRef } from "react";
+import { animate, svg, stagger } from 'animejs';
 
-
+// --- Data ---
+const experience = [
+  {
+    role: "Freelance Full Stack Developer",
+    company: "Green Club IOIT",
+    period: "Dec 2025 – Jan 2026",
+    location: "Pune, India",
+    description: "Architected and developed a high-performance interactive website for the college's environmental initiative. Leveraged Next.js 16 and React 19 for the core framework, integrated immersive 3D elements using React Three Fiber, and implemented complex animations via GSAP and Framer Motion. Features include AI-powered interactions using the Google AI SDK.",
+    stack: ["Next.js 16", "React 19", "Three.js", "GSAP", "Google AI SDK", "Tailwind v4"],
+    link: "https://green-club-ioit.vercel.app/"
+  }
+];
 
 const projects = [
   {
@@ -92,8 +105,6 @@ const achievements = [
   }
 ];
 
-
-
 // --- Animations ---
 
 const fadeInUp: Variants = {
@@ -118,6 +129,54 @@ const staggerContainer: Variants = {
   }
 };
 
+const AnimatedTitle = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const textElements = containerRef.current.querySelectorAll('.hero-text');
+
+    animate(svg.createDrawable(textElements), {
+      draw: '0 1', // Draw from 0% to 100%
+      duration: 3000,
+      ease: 'inOutQuart',
+      delay: stagger(500)
+    });
+  }, []);
+
+  return (
+    <div ref={containerRef} className="w-full max-w-4xl relative">
+       {/* SVG Container matching the font size of original H1 */}
+       <svg 
+         viewBox="0 0 800 180" 
+         className="w-full h-auto overflow-visible font-mono font-bold tracking-tighter"
+         style={{ maxHeight: '300px' }}
+       >
+         {/* Line 1: AI/ML */}
+         <text 
+           x="0" 
+           y="80" 
+           fontSize="90" 
+           className="hero-text fill-transparent stroke-white stroke-[2px]"
+         >
+           AI/ML
+         </text>
+
+         {/* Line 2: Engineer */}
+         <text 
+           x="0" 
+           y="170" 
+           fontSize="90" 
+           className="hero-text fill-transparent stroke-white stroke-[2px]"
+         >
+           Engineer
+         </text>
+       </svg>
+    </div>
+  );
+};
+
 export default function Portfolio() {
   return (
     <div className="min-h-screen bg-bg text-primary selection:bg-white selection:text-black overflow-x-hidden">
@@ -130,6 +189,7 @@ export default function Portfolio() {
           </Link>
           <div className="hidden md:flex gap-8 font-mono text-sm text-secondary">
             <a href="#about" className="hover:text-white transition-colors">About</a>
+            <a href="#experience" className="hover:text-white transition-colors">Experience</a>
             <a href="#projects" className="hover:text-white transition-colors">Projects</a>
             <a href="#articles" className="hover:text-white transition-colors">Articles</a>
             <a href="#leadership" className="hover:text-white transition-colors">Leadership</a>
@@ -154,10 +214,10 @@ export default function Portfolio() {
               Based in Pune, Maharashtra
             </motion.p>
             
-            <motion.h1 variants={fadeInUp} className="font-mono text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-none">
-              AI/ML <br />
-              <span className="text-white">Engineer</span>
-            </motion.h1>
+            {/* Replaced standard H1 with Anime.js SVG Title */}
+            <motion.div variants={fadeInUp}>
+              <AnimatedTitle />
+            </motion.div>
 
             <motion.div variants={fadeInUp} className="max-w-2xl mt-8">
               <p className="font-sans text-xl md:text-2xl text-secondary leading-relaxed">
@@ -214,8 +274,57 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Experience Section */}
+      <section id="experience" className="py-20 px-6 border-t border-accent/30 bg-surface/10">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="font-mono text-4xl mb-12 flex items-center gap-3">
+             <Briefcase className="text-white" /> Experience
+          </h2>
+          
+          <div className="relative border-l border-white/10 ml-3 space-y-12">
+            {experience.map((exp, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="relative pl-12"
+              >
+                {/* Timeline Dot */}
+                <div className="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
+                
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="font-mono text-2xl font-bold text-white">{exp.role}</h3>
+                    <a href={exp.link} target="_blank" className="text-secondary hover:text-white hover:underline decoration-1 underline-offset-4 font-mono text-sm flex items-center gap-2 mt-1 transition-colors">
+                      {exp.company} <ExternalLink size={12} />
+                    </a>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-mono text-sm text-white/80">{exp.period}</p>
+                    <p className="font-mono text-xs text-secondary/60">{exp.location}</p>
+                  </div>
+                </div>
+
+                <p className="font-sans text-secondary text-lg mb-6 max-w-4xl leading-relaxed">
+                  {exp.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {exp.stack.map(tech => (
+                    <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-md font-mono text-xs text-secondary hover:bg-white/10 transition-colors cursor-default">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Projects Section */}
-      <section id="projects" className="py-20 px-6">
+      <section id="projects" className="py-20 px-6 border-t border-accent/30">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-16">
             <h2 className="font-mono text-5xl md:text-7xl">Projects</h2>
@@ -234,7 +343,7 @@ export default function Portfolio() {
                 transition={{ delay: index * 0.1 }}
                 className="group relative bg-surface border border-accent overflow-hidden hover:border-white/50 transition-colors duration-500"
               >
-                {/* Image Container with Fallback Logic */}
+                {/* Image Container */}
                 <div className="h-64 relative overflow-hidden bg-[#1a1a1a] border-b border-accent/50">
                   {project.image ? (
                     <>
@@ -245,24 +354,17 @@ export default function Portfolio() {
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 768px) 100vw, 50vw"
                       />
-                      {/* Dark Overlay that vanishes on hover */}
                       <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500" />
                     </>
                   ) : (
-                    // Fallback UI if image is missing or empty string
                     <div className="relative w-full h-64 flex flex-col items-center justify-center gap-6 bg-[#1a1a1a] border-b border-accent/50 overflow-hidden">
-                      {/* Rotating dashed ring */}
                       <div className="relative w-20 h-20">
                         <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/40 animate-spin-slow" />
                         <div className="absolute inset-2 rounded-full border border-white/10 animate-pulse" />
                       </div>
-
-                      {/* Text */}
                       <p className="font-mono text-xs tracking-[0.35em] text-secondary uppercase">
                         Working on it
                       </p>
-
-                      {/* Subtle scanline */}
                       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent animate-scan" />
                     </div>
                   )}
@@ -292,7 +394,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Achievements (Eth Online) */}
+      {/* Achievements */}
       <section id="achievements" className="py-20 px-6 bg-surface/30">
         <div className="max-w-7xl mx-auto">
            <h2 className="font-mono text-4xl mb-12 flex items-center gap-4">
@@ -312,7 +414,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Articles / Publications */}
+      {/* Articles */}
       <section id="articles" className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <h2 className="font-mono text-5xl mb-12">Publications</h2>
