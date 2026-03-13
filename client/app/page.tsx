@@ -1,318 +1,580 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
-import { ArrowRight, Github, Linkedin, Mail, FileText, Globe, Cpu, Award, Users, Briefcase, ExternalLink } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import Hero3D from "./components/hero/Hero3D";
 import { useEffect, useRef } from "react";
-import { animate, svg, stagger } from 'animejs';
+import { motion, Variants } from "framer-motion";
+import {
+  Github, Linkedin, Mail, ExternalLink,
+  ArrowUpRight, Award, Users, Briefcase,
+} from "lucide-react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+const HeroOrbit = dynamic(() => import("./components/hero/Heroorbit"), { ssr: false });
 
-// --- Data ---
+/* ─────────────────────────────────────────────
+   DATA
+───────────────────────────────────────────── */
 const experience = [
   {
     role: "Freelance Full Stack Developer",
     company: "Green Club IOIT",
     period: "Dec 2025 – Jan 2026",
     location: "Pune, India",
-    description: "Architected and developed a high-performance interactive website for the college's environmental initiative. Leveraged Next.js 16 and React 19 for the core framework, integrated immersive 3D elements using React Three Fiber, and implemented complex animations via GSAP and Framer Motion. Features include AI-powered interactions using the Google AI SDK.",
+    description:
+      "Architected and developed a high-performance interactive website for the college's environmental initiative. Leveraged Next.js 16 and React 19, integrated immersive 3D elements using React Three Fiber, and implemented complex animations via GSAP and Framer Motion. Features include AI-powered interactions using the Google AI SDK.",
     stack: ["Next.js 16", "React 19", "Three.js", "GSAP", "Google AI SDK", "Tailwind v4"],
-    link: "https://green-club-ioit.vercel.app/"
-  }
+    link: "https://green-club-ioit.vercel.app/",
+  },
 ];
 
 const projects = [
   {
     title: "Finance AI Research",
-    tags: ["LangGraph", "FastAPI"],
-    description: "Financial AI Assistant implementing advanced RAG architecture (Self-RAG, Corrective RAG, Adaptive RAG) to answer complex queries from live APIs.",
+    tags: ["LangGraph", "FastAPI", "RAG"],
+    description:
+      "Financial AI Assistant implementing advanced RAG architecture (Self-RAG, Corrective RAG, Adaptive RAG) to answer complex queries from live APIs.",
     link: "https://github.com/ChinmayNakwa/Financial-AI-System",
-    image: "/Fin-AI.png" 
   },
   {
     title: "Cerebrix",
     tags: ["AI Tutor", "Multi-modal RAG", "Socratic Method"],
-    description: "AI-powered teaching assistant for any subject integrating PDF textbooks and YouTube lectures into a seamless RAG pipeline.",
+    description:
+      "AI-powered teaching assistant for any subject integrating PDF textbooks and YouTube lectures into a seamless RAG pipeline.",
     link: "https://github.com/ChinmayNakwa/Cerebrix",
-    image: "/cerebrix.png"
   },
   {
     title: "Google Workspace MCP",
     tags: ["Claude Desktop", "FastMCP", "Agentic AI"],
-    description: "Model-Context-Protocol server designed to be called by external AI agents for email composition and calendar management.",
+    description:
+      "Model-Context-Protocol server designed to be called by external AI agents for email composition and calendar management.",
     link: "https://github.com/ChinmayNakwa/Google_Workspace_MCP",
-    image: "/mcp.png"
   },
   {
     title: "Lung Cancer Detection",
     tags: ["EfficientNetB4", "TensorFlow", "Medical AI"],
-    description: "A full-stack AI-powered lung cancer detection system with online retraining, MLflow experiment tracking, and a human-in-the-loop learning pipeline.",
+    description:
+      "Full-stack AI diagnostic system with online retraining, MLflow experiment tracking, and a human-in-the-loop learning pipeline.",
     link: "https://github.com/ChinmayNakwa/Lung_Cancer_Detection/tree/ml-pipeline",
-    image: "/lung-cancer.jpg"
   },
   {
     title: "GoRilla",
-    tags: ["Go", "Interpreter"],
-    description: "An Interpreter in GO",
+    tags: ["Go", "Interpreter", "PL Theory"],
+    description:
+      "A fully functional interpreter written in Go — exploring language theory and compiler design from the ground up.",
     link: "https://github.com/ChinmayNakwa/GoRilla",
-    image: ""
   },
   {
     title: "MintFlowAI",
-    tags: ["Gemini", "Blockchain"],
-    description: "AI-Powered NFT Minter on the Sui Blockchain",
+    tags: ["Gemini", "Blockchain", "Sui"],
+    description:
+      "AI-Powered NFT minter on the Sui Blockchain — bridging generative AI with decentralised asset creation.",
     link: "https://github.com/ChinmayNakwa/MintFlowAI",
-    image: "/mint-flow.png"
-  }
+  },
 ];
 
-const articles = [
+const skills = {
+  Languages: ["Python", "Go", "TypeScript", "Java", "C++", "SQL"],
+  "AI / ML": ["PyTorch", "TensorFlow", "LangChain", "LangGraph", "LangSmith", "Hugging Face", "MLflow"],
+  "Tools & Infra": ["FastAPI", "Docker", "Next.js", "MongoDB", "PostgreSQL", "AstraDB", "Google AI SDK"],
+};
+
+const publications = [
   {
     title: "Enhancing Sugarcane Disease Classification Using Transfer Learning",
-    journal: "SSRG International Journal (March 2025)",
-    desc: "Comparative study of DenseNet, VGG, and ConvNeXt, achieving 96% accuracy with ConvNeXt.",
-    link: "https://www.internationaljournalssrg.org/IJECE/paper-details?Id=817"
+    journal: "SSRG International Journal",
+    date: "March 2025",
+    desc: "Comparative study of DenseNet, VGG, and ConvNeXt — achieving 96% accuracy with ConvNeXt.",
+    link: "https://www.internationaljournalssrg.org/IJECE/paper-details?Id=817",
   },
   {
-    title: "Deepfake Detection using ViT_B_16 model",
-    journal: "Intl. Journal of Advanced Research (April 2025)",
-    desc: "Explored Vision Transformers for deepfake detection, achieving 87.33% accuracy on 5,000 images.",
-    link: "https://ijarsct.co.in/Paper24824.pdf"
-  }
+    title: "Deepfake Detection using ViT_B_16 Model",
+    journal: "Intl. Journal of Advanced Research",
+    date: "April 2025",
+    desc: "Explored Vision Transformers for deepfake detection — 87.33% accuracy on 5,000 images.",
+    link: "https://ijarsct.co.in/Paper24824.pdf",
+  },
 ];
 
 const leadership = [
   {
     role: "Director General",
-    org: "IOIT MUN'25",
-    period: "July 2025 – Oct 2025",
-    desc: "Led end-to-end planning for a conference with 90+ delegates and 110+ volunteers."
+    org: "IOIT MUN '25",
+    period: "Jul – Oct 2025",
+    desc: "Led end-to-end planning for a conference with 90+ delegates and 110+ volunteers.",
   },
   {
     role: "USG Delegate Affairs",
-    org: "IOIT MUN'24",
-    period: "Aug 2024 – Oct 2024",
-    desc: "Managed interactions and committee agendas for over 90 delegates."
-  }
+    org: "IOIT MUN '24",
+    period: "Aug – Oct 2024",
+    desc: "Managed interactions and committee agendas for over 90 delegates across multiple committees.",
+  },
 ];
 
-const achievements = [
-  {
-    title: "ETH Online'25",
-    result: "2nd Prize Winner",
-    desc: "Participated in the ETH Online hackathon, built BugChan. It is a decentralized bug-bounty platform.",
-    icon: <Award className="w-6 h-6" />
-  }
-];
-
-// --- Animations ---
-
-const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 0.8, 
-      ease: "easeOut" 
-    } 
-  }
+/* ─────────────────────────────────────────────
+   ANIMATION VARIANTS
+───────────────────────────────────────────── */
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-const staggerContainer: Variants = {
+const stagger: Variants = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
 };
 
-const AnimatedTitle = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+/* ─────────────────────────────────────────────
+   SUB-COMPONENTS
+───────────────────────────────────────────── */
+
+/** Section header — consistent label + title */
+function SectionHeader({ label, title }: { label: string; title: string }) {
+  return (
+    <div className="mb-14">
+      <p
+        className="text-xs tracking-[0.2em] uppercase mb-3 flex items-center gap-3"
+        style={{ fontFamily: "var(--font-mono)", color: "var(--color-accent)" }}
+      >
+        <span className="inline-block w-9 h-px" style={{ background: "var(--color-accent)" }} />
+        {label}
+      </p>
+      <h2
+        className="text-5xl md:text-6xl font-extrabold tracking-tight leading-none"
+        style={{ letterSpacing: "-0.03em" }}
+      >
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+/** Animated SVG hero title (anime.js draw) */
+function AnimatedTitle() {
+  const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    const textElements = containerRef.current.querySelectorAll('.hero-text');
-
-    animate(svg.createDrawable(textElements), {
-      draw: '0 1', // Draw from 0% to 100%
-      duration: 3000,
-      ease: 'inOutQuart',
-      delay: stagger(500)
+    let cancelled = false;
+    import("animejs").then(({ animate, svg, stagger: aStagger }) => {
+      if (cancelled || !ref.current) return;
+      const els = ref.current.querySelectorAll(".draw-text");
+      animate(svg.createDrawable(els), {
+        draw: "0 1",
+        duration: 2400,
+        ease: "inOutQuart",
+        delay: aStagger(400),
+      });
     });
+    return () => { cancelled = true; };
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full max-w-4xl relative">
-       {/* SVG Container matching the font size of original H1 */}
-       <svg 
-         viewBox="0 0 800 180" 
-         className="w-full h-auto overflow-visible font-mono font-bold tracking-tighter"
-         style={{ maxHeight: '300px' }}
-       >
-         {/* Line 1: AI/ML */}
-         <text 
-           x="0" 
-           y="80" 
-           fontSize="90" 
-           className="hero-text fill-transparent stroke-white stroke-[2px]"
-         >
-           AI/ML
-         </text>
-
-         {/* Line 2: Engineer */}
-         <text 
-           x="0" 
-           y="170" 
-           fontSize="90" 
-           className="hero-text fill-transparent stroke-white stroke-[2px]"
-         >
-           Engineer
-         </text>
-       </svg>
-    </div>
+    <svg
+      ref={ref}
+      viewBox="0 0 820 190"
+      className="w-full max-w-2xl h-auto overflow-visible"
+      style={{ maxHeight: 220 }}
+      aria-label="AI/ML Engineer"
+    >
+      <text
+        x="0" y="90" fontSize="96"
+        className="draw-text"
+        style={{
+          fill: "transparent",
+          stroke: "var(--color-primary)",
+          strokeWidth: 1.5,
+          fontFamily: "var(--font-sans)",
+          fontWeight: 800,
+          letterSpacing: "-0.04em",
+        }}
+      >
+        AI/ML
+      </text>
+      <text
+        x="0" y="182" fontSize="96"
+        className="draw-text"
+        style={{
+          fill: "transparent",
+          stroke: "var(--color-primary)",
+          strokeWidth: 1.5,
+          fontFamily: "var(--font-sans)",
+          fontWeight: 800,
+          letterSpacing: "-0.04em",
+        }}
+      >
+        Engineer.
+      </text>
+    </svg>
   );
-};
+}
 
+/* ─────────────────────────────────────────────
+   PAGE
+───────────────────────────────────────────── */
 export default function Portfolio() {
+  /* Scroll reveal */
+  useEffect(() => {
+    const els = document.querySelectorAll<HTMLElement>(".reveal");
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            (e.target as HTMLElement).classList.add("in-view");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-bg text-primary selection:bg-white selection:text-black overflow-x-hidden">
-      
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 backdrop-blur-md bg-bg/80 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="font-mono text-xl font-bold tracking-tighter">
-            Chinmay Nakwa
-          </Link>
-          <div className="hidden md:flex gap-8 font-mono text-sm text-secondary">
-            <a href="#about" className="hover:text-white transition-colors">About</a>
-            <a href="#experience" className="hover:text-white transition-colors">Experience</a>
-            <a href="#projects" className="hover:text-white transition-colors">Projects</a>
-            <a href="#articles" className="hover:text-white transition-colors">Articles</a>
-            <a href="#leadership" className="hover:text-white transition-colors">Leadership</a>
-            <a href="#contact" className="hover:text-white transition-colors">Contact</a>
-          </div>
-          <div className="font-mono text-sm border border-white/20 rounded-full px-3 py-1">
-            EN
-          </div>
+    <div
+      className="min-h-screen overflow-x-hidden"
+      style={{ background: "var(--color-bg)", color: "var(--color-primary)" }}
+    >
+      {/* ── Nav ── */}
+      <nav
+        className="fixed top-0 w-full z-50 flex justify-between items-center px-8 py-4"
+        style={{
+          backdropFilter: "blur(14px)",
+          background: "rgba(11,11,14,0.75)",
+          borderBottom: "1px solid var(--color-border)",
+        }}
+      >
+        <Link
+          href="/"
+          className="text-sm font-bold tracking-tight"
+          style={{ fontFamily: "var(--font-mono)" }}
+        >
+          CN<span style={{ color: "var(--color-accent)" }}>.</span>
+        </Link>
+
+        <div className="hidden md:flex gap-8">
+          {["about", "skills", "experience", "projects", "publications", "contact"].map((s) => (
+            <a
+              key={s}
+              href={`#${s}`}
+              className="capitalize text-xs tracking-widest uppercase transition-colors"
+              style={{
+                fontFamily: "var(--font-mono)",
+                color: "var(--color-secondary)",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-primary)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-secondary)")}
+            >
+              {s}
+            </a>
+          ))}
         </div>
+
+        <a
+          href="mailto:29chinmaynakwa@gmail.com"
+          className="text-xs tracking-widest uppercase px-4 py-2 transition-all"
+          style={{
+            fontFamily: "var(--font-mono)",
+            border: "1px solid var(--color-border-h)",
+            color: "var(--color-primary)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "var(--color-primary)";
+            e.currentTarget.style.color = "var(--color-bg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.color = "var(--color-primary)";
+          }}
+        >
+          Get in touch →
+        </a>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-24 pb-20 px-6 min-h-[90vh] flex flex-col justify-center">
-        <div className="max-w-7xl mx-auto w-full">
-          <motion.div 
+      {/* ── Hero ── */}
+      <section
+        className="relative min-h-screen flex flex-col justify-center pt-28 pb-16 px-8 overflow-hidden grid-bg"
+      >
+        {/* Radial fade on grid */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 70% 80% at 10% 50%, transparent 40%, var(--color-bg) 85%)",
+          }}
+        />
+        {/* Accent glow top-right */}
+        <div
+          className="absolute -top-40 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, rgba(184,212,240,0.05) 0%, transparent 65%)" }}
+        />
+
+        <div className="relative max-w-7xl mx-auto w-full">
+          <motion.div
             initial="hidden"
             animate="visible"
-            variants={staggerContainer}
-            className="space-y-6"
+            variants={stagger}
+            className="max-w-2xl space-y-6"
           >
-            <motion.p variants={fadeInUp} className="font-mono text-secondary text-lg">
-              Based in Pune, Maharashtra
-            </motion.p>
-            
-            {/* Replaced standard H1 with Anime.js SVG Title */}
-            <motion.div variants={fadeInUp}>
+            {/* Status pill */}
+            <motion.div variants={fadeUp}>
+              <span
+                className="inline-flex items-center gap-2 text-xs tracking-[0.12em] uppercase px-3 py-1.5"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--color-accent)",
+                  border: "1px solid rgba(184,212,240,0.2)",
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full animate-glow-pulse"
+                  style={{ background: "var(--color-accent)" }}
+                />
+                Available for collaboration · Pune, IN
+              </span>
+            </motion.div>
+
+            {/* Animated SVG title */}
+            <motion.div variants={fadeUp}>
               <AnimatedTitle />
             </motion.div>
 
-            <motion.div variants={fadeInUp} className="max-w-2xl mt-8">
-              <p className="font-sans text-xl md:text-2xl text-secondary leading-relaxed">
-                Building AI that ships<span className="text-white italic"> RAG systems, MCP integrations,</span> and <span className="text-white italic">production ML APIs</span> to make complex data processing efficient.
-              </p>
-            </motion.div>
+            {/* Descriptor */}
+            <motion.p
+              variants={fadeUp}
+              className="text-lg leading-relaxed max-w-xl"
+              style={{ color: "var(--color-secondary)" }}
+            >
+              Building AI that ships —{" "}
+              <span style={{ color: "var(--color-primary)" }}>RAG systems</span>,{" "}
+              <span style={{ color: "var(--color-primary)" }}>MCP integrations</span>, and{" "}
+              <span style={{ color: "var(--color-primary)" }}>production ML APIs</span>{" "}
+              to make complex data processing efficient.
+            </motion.p>
 
-            {/* Social Pills */}
-            <motion.div variants={fadeInUp} className="flex flex-wrap gap-4 mt-12">
+            {/* Social links */}
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 pt-2">
               {[
-                { name: "Github", icon: <Github size={18} />, href: "https://github.com/ChinmayNakwa" },
-                { name: "LinkedIn", icon: <Linkedin size={18} />, href: "https://www.linkedin.com/in/chinmay-nakwa-9a0836241/" },
-                { name: "Email", icon: <Mail size={18} />, href: "mailto:29chinmaynakwa@gmail.com" },
-              ].map((social) => (
-                <a 
-                  key={social.name} 
-                  href={social.href}
-                  className="flex items-center gap-2 px-6 py-3 border border-accent font-mono text-sm hover:bg-white hover:text-black transition-colors"
+                { label: "GitHub",   icon: <Github size={15} />,   href: "https://github.com/ChinmayNakwa" },
+                { label: "LinkedIn", icon: <Linkedin size={15} />, href: "https://www.linkedin.com/in/chinmay-nakwa-9a0836241/" },
+                { label: "Email",    icon: <Mail size={15} />,     href: "mailto:29chinmaynakwa@gmail.com" },
+              ].map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  className="flex items-center gap-2 px-5 py-2.5 text-sm transition-all"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    border: "1px solid var(--color-border-h)",
+                    color: "var(--color-secondary)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--color-accent)";
+                    e.currentTarget.style.color = "var(--color-accent)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--color-border-h)";
+                    e.currentTarget.style.color = "var(--color-secondary)";
+                  }}
                 >
-                  {social.icon} {social.name}
+                  {s.icon} {s.label}
                 </a>
               ))}
             </motion.div>
           </motion.div>
 
-          <Hero3D />
-         </div>
-        
-        {/* Decorative Background Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-b from-white/5 to-transparent rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+          {/* Orbital ring animation */}
+          <HeroOrbit />
+        </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 px-6 border-t border-accent/30">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <h2 className="font-mono text-4xl mb-8">About Me</h2>
-            <div className="space-y-6 font-sans text-lg text-secondary">
+      {/* ── About ── */}
+      <section
+        id="about"
+        className="py-28 px-8"
+        style={{ borderTop: "1px solid var(--color-border)" }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader label="About" title="Who I Am" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 reveal">
+            <div className="space-y-5 text-lg leading-relaxed" style={{ color: "var(--color-secondary)" }}>
               <p>
-                Third year B.Tech student at AISSMS IOIT (SPPU) building production AI systems with LLMs, RAG architectures, and deployed ML models. Published researcher in medical and agricultural AI, now focused on making AI agents and retrieval systems that solve real-world problems
+                I'm an AI/ML engineer who bridges the gap between{" "}
+                <strong style={{ color: "var(--color-primary)" }}>research and production</strong>.
+                Third-year B.Tech student at AISSMS IOIT (SPPU), building systems with LLMs,
+                RAG architectures, and deployed ML models.
+              </p>
+              
+              <p>
+                Currently open to collaborations in GenAI, RAG systems, and applied deep learning research.
               </p>
             </div>
-          </div>
-          <div className="space-y-8">
-            <h3 className="font-mono text-2xl mb-4">Tech Stack</h3>
-            <div className="flex flex-wrap gap-3">
-              {["Python", "TensorFlow", "PyTorch", "LangChain", "LangGraph", "LangSmith", "Docker", "FastAPI", "Java", "MLflow", "MongoDB", "AstraDB", "C++", "Go", "PostgreSQL"].map(skill => (
-                <span key={skill} className="px-4 py-2 bg-surface border border-accent rounded-lg font-mono text-sm text-secondary hover:text-white transition-colors cursor-default">
-                  {skill}
-                </span>
+
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { label: "Location",     value: "Pune, Maharashtra, India" },
+                { label: "Focus",        value: "RAG · LLMs · Deep Learning" },
+                { label: "Degree",       value: "B.Tech, AISSMS IOIT (SPPU)" },
+                { label: "Status",       value: "Open to collaborate" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="flex justify-between items-center px-5 py-4 transition-colors"
+                  style={{
+                    border: "1px solid var(--color-border)",
+                    background: "var(--color-surface)",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-border-h)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--color-border)")}
+                >
+                  <span
+                    className="text-xs tracking-widest uppercase"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
+                  >
+                    {item.label}
+                  </span>
+                  <span
+                    className="text-sm font-semibold"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--color-primary)" }}
+                  >
+                    {item.value}
+                  </span>
+                </div>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section id="experience" className="py-20 px-6 border-t border-accent/30 bg-surface/10">
+      {/* ── Skills ── */}
+      <section
+        id="skills"
+        className="py-28 px-8"
+        style={{ borderTop: "1px solid var(--color-border)", background: "var(--color-surface)" }}
+      >
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-mono text-4xl mb-12 flex items-center gap-3">
-             <Briefcase className="text-white" /> Experience
-          </h2>
-          
-          <div className="relative border-l border-white/10 ml-3 space-y-12">
-            {experience.map((exp, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
+          <SectionHeader label="Skills" title="Technical Stack" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 reveal">
+            {Object.entries(skills).map(([category, items]) => (
+              <div key={category}>
+                <p
+                  className="text-xs tracking-[0.18em] uppercase pb-4 mb-5"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-accent)",
+                    borderBottom: "1px solid var(--color-border)",
+                  }}
+                >
+                  {category}
+                </p>
+                <ul className="space-y-3">
+                  {items.map((skill) => (
+                    <li
+                      key={skill}
+                      className="flex items-center gap-3 text-sm transition-colors cursor-default"
+                      style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-primary)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-secondary)")}
+                    >
+                      <span
+                        className="w-1 h-1 rounded-full flex-shrink-0 transition-colors"
+                        style={{ background: "var(--color-secondary)" }}
+                      />
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Experience ── */}
+      <section
+        id="experience"
+        className="py-28 px-8"
+        style={{ borderTop: "1px solid var(--color-border)" }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader label="Experience" title="Where I've Worked" />
+          <div
+            className="relative reveal"
+            style={{ borderLeft: "1px solid var(--color-border)" }}
+          >
+            {experience.map((exp, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -16 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative pl-12"
+                transition={{ duration: 0.45, ease: "easeOut" }}
+                className="relative pl-10 pb-14"
               >
-                {/* Timeline Dot */}
-                <div className="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]"></div>
-                
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
+                {/* Timeline dot */}
+                <div
+                  className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full"
+                  style={{
+                    background: "var(--color-bg)",
+                    border: "1px solid var(--color-accent)",
+                    boxShadow: "0 0 8px rgba(184,212,240,0.4)",
+                  }}
+                />
+
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-4">
                   <div>
-                    <h3 className="font-mono text-2xl font-bold text-white">{exp.role}</h3>
-                    <a href={exp.link} target="_blank" className="text-secondary hover:text-white hover:underline decoration-1 underline-offset-4 font-mono text-sm flex items-center gap-2 mt-1 transition-colors">
-                      {exp.company} <ExternalLink size={12} />
+                    <h3 className="text-2xl font-bold mb-1">{exp.role}</h3>
+                    <a
+                      href={exp.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm transition-colors"
+                      style={{ fontFamily: "var(--font-mono)", color: "var(--color-accent)" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-primary)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+                    >
+                      {exp.company} <ExternalLink size={11} />
                     </a>
                   </div>
                   <div className="text-right">
-                    <p className="font-mono text-sm text-white/80">{exp.period}</p>
-                    <p className="font-mono text-xs text-secondary/60">{exp.location}</p>
+                    <p
+                      className="text-sm"
+                      style={{ fontFamily: "var(--font-mono)", color: "var(--color-primary)" }}
+                    >
+                      {exp.period}
+                    </p>
+                    <p
+                      className="text-xs mt-0.5"
+                      style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
+                    >
+                      {exp.location}
+                    </p>
                   </div>
                 </div>
 
-                <p className="font-sans text-secondary text-lg mb-6 max-w-4xl leading-relaxed">
+                <p
+                  className="text-base leading-relaxed mb-6 max-w-3xl"
+                  style={{ color: "var(--color-secondary)" }}
+                >
                   {exp.description}
                 </p>
 
                 <div className="flex flex-wrap gap-2">
-                  {exp.stack.map(tech => (
-                    <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-md font-mono text-xs text-secondary hover:bg-white/10 transition-colors cursor-default">
+                  {exp.stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 text-xs transition-colors cursor-default"
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        border: "1px solid var(--color-border)",
+                        color: "var(--color-secondary)",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = "var(--color-border-h)";
+                        e.currentTarget.style.color = "var(--color-primary)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = "var(--color-border)";
+                        e.currentTarget.style.color = "var(--color-secondary)";
+                      }}
+                    >
                       {tech}
                     </span>
                   ))}
@@ -323,179 +585,300 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-20 px-6 border-t border-accent/30">
+      {/* ── Projects ── */}
+      <section
+        id="projects"
+        className="py-28 px-8"
+        style={{ borderTop: "1px solid var(--color-border)", background: "var(--color-surface)" }}
+      >
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-end mb-16">
-            <h2 className="font-mono text-5xl md:text-7xl">Projects</h2>
-            <div className="hidden md:block px-6 py-2 bg-pill text-white rounded-full font-mono font-bold">
-              {projects.length} Works
-            </div>
+          <div className="flex justify-between items-end mb-14">
+            <SectionHeader label="Projects" title="Selected Work" />
+            <span
+              className="hidden md:block text-xs tracking-widest uppercase mb-14"
+              style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
+            >
+              {String(projects.length).padStart(2, "0")} projects
+            </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
+          <div
+            className="grid grid-cols-1 md:grid-cols-3 gap-px reveal"
+            style={{ background: "var(--color-border)" }}
+          >
+            {projects.map((project, i) => (
+              <motion.a
+                key={i}
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group relative bg-surface border border-accent overflow-hidden hover:border-white/50 transition-colors duration-500"
+                transition={{ duration: 0.4, delay: i * 0.06, ease: "easeOut" }}
+                className="flex flex-col p-7 group transition-colors"
+                style={{ background: "var(--color-surface)", textDecoration: "none", color: "inherit" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-surface-2)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-surface)")}
               >
-                {/* Image Container */}
-                <div className="h-64 relative overflow-hidden bg-[#1a1a1a] border-b border-accent/50">
-                  {project.image ? (
-                    <>
-                      <Image 
-                        src={project.image} 
-                        alt={project.title} 
-                        fill 
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                      <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-500" />
-                    </>
-                  ) : (
-                    <div className="relative w-full h-64 flex flex-col items-center justify-center gap-6 bg-[#1a1a1a] border-b border-accent/50 overflow-hidden">
-                      <div className="relative w-20 h-20">
-                        <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/40 animate-spin-slow" />
-                        <div className="absolute inset-2 rounded-full border border-white/10 animate-pulse" />
-                      </div>
-                      <p className="font-mono text-xs tracking-[0.35em] text-secondary uppercase">
-                        Working on it
-                      </p>
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent animate-scan" />
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-8">
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map(tag => (
-                      <span key={tag} className="text-xs font-mono text-secondary border border-white/10 px-2 py-1 rounded">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <h3 className="font-mono text-2xl font-bold mb-3 group-hover:underline decoration-1 underline-offset-4">
-                    {project.title}
-                  </h3>
-                  <p className="font-sans text-secondary mb-6 text-sm leading-relaxed">
-                    {project.description}
-                  </p>
-                  <a href={project.link} target="_blank" className="inline-flex items-center gap-2 font-mono text-sm bg-white text-black px-5 py-2 hover:bg-[#A6A6A6] transition-colors">
-                    View Project <ArrowRight size={16} />
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Achievements */}
-      <section id="achievements" className="py-20 px-6 bg-surface/30">
-        <div className="max-w-7xl mx-auto">
-           <h2 className="font-mono text-4xl mb-12 flex items-center gap-4">
-            <Award className="text-white" /> Achievements
-           </h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {achievements.map((item, idx) => (
-                 <div key={idx} className="p-8 border border-accent bg-bg flex flex-col justify-between hover:border-white transition-colors">
-                    <div>
-                      <h3 className="font-mono text-2xl text-white mb-2">{item.title}</h3>
-                      <span className="inline-block bg-white/10 text-white text-xs font-mono px-2 py-1 rounded mb-4">{item.result}</span>
-                      <p className="text-secondary font-sans">{item.desc}</p>
-                    </div>
-                 </div>
-              ))}
-           </div>
-        </div>
-      </section>
-
-      {/* Articles */}
-      <section id="articles" className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="font-mono text-5xl mb-12">Publications</h2>
-          <div className="space-y-6">
-            {articles.map((article, index) => (
-              <a 
-                key={index} 
-                href={article.link} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="block"
-              >
-                <motion.div 
-                  whileHover={{ scale: 1.01 }}
-                  className="p-8 border border-accent bg-surface hover:bg-[#252525] transition-all cursor-pointer"
-                >
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
-                    <h3 className="font-mono text-xl md:text-2xl text-white">{article.title}</h3>
-                    <span className="font-mono text-xs text-secondary border border-white/10 px-3 py-1 rounded-full whitespace-nowrap">
-                      {article.journal}
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5 mb-5">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] tracking-widest uppercase px-2 py-1"
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        color: "var(--color-accent)",
+                        background: "var(--color-accent-dim)",
+                      }}
+                    >
+                      {tag}
                     </span>
-                  </div>
-                  <p className="font-sans text-secondary max-w-3xl">
-                    {article.desc}
-                  </p>
-                </motion.div>
-              </a>
+                  ))}
+                </div>
+
+                <h3 className="text-xl font-bold mb-2 leading-snug">{project.title}</h3>
+
+                <p
+                  className="text-sm leading-relaxed flex-1 mb-6"
+                  style={{ color: "var(--color-secondary)" }}
+                >
+                  {project.description}
+                </p>
+
+                <span
+                  className="inline-flex items-center gap-1.5 text-xs tracking-widest uppercase transition-colors"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-secondary)",
+                  }}
+                >
+                  View on GitHub
+                  <ArrowUpRight
+                    size={12}
+                    className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </span>
+              </motion.a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Leadership Section */}
-      <section id="leadership" className="py-20 px-6 border-t border-accent/30">
+      {/* ── Publications ── */}
+      <section
+        id="publications"
+        className="py-28 px-8"
+        style={{ borderTop: "1px solid var(--color-border)" }}
+      >
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-mono text-4xl mb-12 flex items-center gap-3">
-             <Users /> Leadership & Extracurricular
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {leadership.map((item, index) => (
-              <div key={index} className="pl-6 border-l-2 border-accent hover:border-white transition-colors duration-300">
-                 <h3 className="font-mono text-2xl text-white mb-1">{item.role}</h3>
-                 <div className="flex justify-between items-center mb-4">
-                   <span className="font-sans text-white/80">{item.org}</span>
-                   <span className="font-mono text-xs text-secondary">{item.period}</span>
-                 </div>
-                 <p className="font-sans text-secondary text-sm leading-relaxed">
-                   {item.desc}
-                 </p>
-              </div>
+          <SectionHeader label="Research" title="Publications" />
+          <div
+            className="flex flex-col gap-px reveal"
+            style={{ background: "var(--color-border)" }}
+          >
+            {publications.map((pub, i) => (
+              <a
+                key={i}
+                href={pub.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-8 items-center px-8 py-7 transition-colors group"
+                style={{ background: "var(--color-bg)", textDecoration: "none", color: "inherit" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--color-surface)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "var(--color-bg)")}
+              >
+                <span
+                  className="text-4xl font-light flex-shrink-0 w-12 leading-none select-none"
+                  style={{ fontFamily: "var(--font-mono)", color: "rgba(255,255,255,0.08)" }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
+                <div className="flex-1 min-w-0">
+                  <p className="text-base font-semibold mb-1 leading-snug">{pub.title}</p>
+                  <p
+                    className="text-xs mb-2"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--color-accent)" }}
+                  >
+                    {pub.journal} · {pub.date}
+                  </p>
+                  <p className="text-sm" style={{ color: "var(--color-secondary)" }}>
+                    {pub.desc}
+                  </p>
+                </div>
+
+                <ArrowUpRight
+                  size={18}
+                  className="flex-shrink-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  style={{ color: "var(--color-secondary)" }}
+                />
+              </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer / Contact */}
-      <footer id="contact" className="py-6 px-6 border-t border-accent/30 bg-[#0a0a0a]">
-        <div className="max-w-7xl mx-auto text-center md:text-left">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            <div>
-              <h2 className="font-mono text-2xl md:text-4xl font-bold mb-4">Let's build something.</h2>
-              <p className="text-secondary font-sans text-base mb-6 max-w-md">
-                Open to collaborations in GenAI, RAG systems, and Deep Learning research.
-              </p>
-              <a href="mailto:29chinmaynakwa@gmail.com" className="inline-block bg-white text-black font-mono text-sm px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform">
-                Get in touch
-              </a>
-            </div>
-            <div className="md:text-right space-y-2">
-              <p className="font-mono text-sm text-secondary">Pune, Maharashtra</p>
-              <div className="flex justify-center md:justify-end gap-6 pt-2">
-                <a href="https://www.linkedin.com/in/chinmay-nakwa-9a0836241/" className="text-secondary hover:text-white text-sm transition-colors">LinkedIn</a>
-                <a href="https://github.com/ChinmayNakwa" className="text-secondary hover:text-white text-sm transition-colors">GitHub</a>
-                <a href="https://x.com/NakwaChinm580" className="text-secondary hover:text-white text-sm transition-colors">Twitter</a>
+      {/* ── Achievements + Leadership side by side ── */}
+      <section
+        className="py-28 px-8"
+        style={{ borderTop: "1px solid var(--color-border)", background: "var(--color-surface)" }}
+      >
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20">
+          {/* Achievements */}
+          <div>
+            <SectionHeader label="Recognition" title="Achievements" />
+            <div className="space-y-4 reveal">
+              <div
+                className="p-7 transition-colors"
+                style={{ border: "1px solid var(--color-border)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-border-h)")}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--color-border)")}
+              >
+                <span
+                  className="inline-block text-[10px] tracking-widest uppercase px-2.5 py-1 mb-4"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-accent)",
+                    border: "1px solid rgba(184,212,240,0.2)",
+                  }}
+                >
+                  2nd Prize Winner
+                </span>
+                <h3 className="text-2xl font-bold mb-2">ETH Online '25</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--color-secondary)" }}>
+                  Built BugChan — a decentralised bug-bounty platform at the ETH Online hackathon, placing 2nd.
+                </p>
               </div>
             </div>
           </div>
-          <div className="border-t border-white/5 flex items-center justify-center text-xs font-mono text-secondary/50 pt-4">
-            <p>© 2025 Chinmay Nakwa. All rights reserved.</p>
+
+          {/* Leadership */}
+          <div id="leadership">
+            <SectionHeader label="Beyond Engineering" title="Leadership" />
+            <div className="space-y-8 reveal">
+              {leadership.map((item, i) => (
+                <div
+                  key={i}
+                  className="pl-5 transition-colors"
+                  style={{ borderLeft: "2px solid var(--color-border)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderLeftColor = "var(--color-accent)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderLeftColor = "var(--color-border)")}
+                >
+                  <h4 className="text-lg font-bold">{item.role}</h4>
+                  <div
+                    className="flex gap-4 text-xs mt-0.5 mb-2"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    <span style={{ color: "var(--color-accent)" }}>{item.org}</span>
+                    <span style={{ color: "var(--color-secondary)" }}>{item.period}</span>
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--color-secondary)" }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+      </section>
+
+      {/* ── Contact ── */}
+      <section
+        id="contact"
+        className="py-28 px-8"
+        style={{ borderTop: "1px solid var(--color-border)" }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-end reveal">
+            {/* Left — big CTA */}
+            <div>
+              <p
+                className="text-xs tracking-[0.2em] uppercase mb-4 flex items-center gap-3"
+                style={{ fontFamily: "var(--font-mono)", color: "var(--color-accent)" }}
+              >
+                <span className="inline-block w-9 h-px" style={{ background: "var(--color-accent)" }} />
+                Contact
+              </p>
+              <h2
+                className="text-5xl md:text-7xl font-extrabold leading-none mb-8"
+                style={{ letterSpacing: "-0.04em" }}
+              >
+                Let's build
+                <br />
+                <span style={{ color: "var(--color-accent)" }}>something.</span>
+              </h2>
+              <p
+                className="text-base leading-relaxed max-w-sm"
+                style={{ color: "var(--color-secondary)" }}
+              >
+                Open to collaborations in GenAI, RAG systems, and deep learning research.
+                Whether it's a project, role, or just a conversation — reach out.
+              </p>
+            </div>
+
+            {/* Right — link list */}
+            <div className="space-y-2">
+              {[
+                { label: "Email",    value: "29chinmaynakwa@gmail.com", href: "mailto:29chinmaynakwa@gmail.com" },
+                { label: "GitHub",   value: "github.com/ChinmayNakwa",  href: "https://github.com/ChinmayNakwa" },
+                { label: "LinkedIn", value: "linkedin.com/in/chinmay-nakwa", href: "https://www.linkedin.com/in/chinmay-nakwa-9a0836241/" },
+                { label: "Twitter",  value: "@NakwaChinm580",           href: "https://x.com/NakwaChinm580" },
+              ].map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith("mailto") ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  className="flex justify-between items-center px-5 py-4 transition-colors group"
+                  style={{
+                    border: "1px solid var(--color-border)",
+                    textDecoration: "none",
+                    color: "var(--color-primary)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "var(--color-accent)";
+                    e.currentTarget.style.color = "var(--color-accent)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "var(--color-border)";
+                    e.currentTarget.style.color = "var(--color-primary)";
+                  }}
+                >
+                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.82rem" }}>
+                    {link.value}
+                  </span>
+                  <span
+                    className="text-xs tracking-widest uppercase"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
+                  >
+                    {link.label} →
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer
+        className="flex flex-col md:flex-row justify-between items-center px-8 py-5 gap-2"
+        style={{ borderTop: "1px solid var(--color-border)" }}
+      >
+        <p
+          className="text-xs"
+          style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
+        >
+          © 2025 Chinmay Nakwa
+        </p>
+        <p
+          className="text-xs"
+          style={{ fontFamily: "var(--font-mono)", color: "var(--color-secondary)" }}
+        >
+          Pune, Maharashtra · AI/ML Engineer
+        </p>
       </footer>
     </div>
   );

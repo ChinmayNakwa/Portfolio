@@ -1,32 +1,36 @@
 import type { Metadata } from "next";
-import { Fira_Code, Open_Sans } from "next/font/google";
+import { DM_Mono, Syne } from "next/font/google";
 import "./globals.css";
 
-const firaCode = Fira_Code({
+const dmMono = DM_Mono({
   subsets: ["latin"],
-  variable: "--font-fira-code",
+  weight: ["300", "400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
-const openSans = Open_Sans({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-open-sans",
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-sans",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Chinmay Nakwa | AI/ML Engineer",
-  description: "Portfolio of Chinmay Nakwa - AI/ML Engineer specializing in RAG, LLMs, and Deep Learning.",
+  description:
+    "Portfolio of Chinmay Nakwa — AI/ML Engineer specialising in RAG systems, LLMs, and deep learning that ships.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${firaCode.variable} ${openSans.variable} font-sans bg-bg text-primary antialiased selection:bg-white selection:text-black`}>
+      <body
+        className={`${dmMono.variable} ${syne.variable} noise`}
+        style={{ fontFamily: "var(--font-sans)" }}
+      >
         {children}
       </body>
     </html>
