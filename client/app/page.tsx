@@ -251,7 +251,7 @@ export default function Portfolio() {
         </Link>
 
         <div className="hidden md:flex gap-8">
-          {["about", "skills", "experience", "projects", "publications", "contact"].map((s) => (
+          {["about", "skills", "experience", "projects", "publications", "achievements", "contact"].map((s) => (
             <a
               key={s}
               href={`#${s}`}
@@ -720,8 +720,8 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* ── Achievements + Leadership side by side ── */}
-      <section
+     {/* ── Achievements + Leadership side by side ── */}
+      <section id="achievements"
         className="py-28 px-8"
         style={{ borderTop: "1px solid var(--color-border)", background: "var(--color-surface)" }}
       >
@@ -751,24 +751,46 @@ export default function Portfolio() {
                   Built BugChan — a decentralised bug-bounty platform at the ETH Online hackathon, placing 2nd.
                 </p>
               </div>
+
+              <div
+                className="p-7 transition-colors"
+                style={{ border: "1px solid var(--color-border)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-border-h)")}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--color-border)")}
+              >
+                <span
+                  className="inline-block text-[10px] tracking-widest uppercase px-2.5 py-1 mb-4"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-accent)",
+                    border: "1px solid rgba(184,212,240,0.2)",
+                  }}
+                >
+                  Track Winner
+                </span>
+                <h3 className="text-2xl font-bold mb-2">HackByte 4.0 (MLH)</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--color-secondary)" }}>
+                  Won the GitHub Track at HackByte 4.0, a Major League Hacking sanctioned hackathon.
+                </p>
+              </div>
             </div>
           </div>
 
           {/* Leadership */}
           <div id="leadership">
             <SectionHeader label="Beyond Engineering" title="Leadership" />
-            <div className="space-y-8 reveal">
+            <div className="space-y-4 reveal">
               {leadership.map((item, i) => (
                 <div
                   key={i}
-                  className="pl-5 transition-colors"
-                  style={{ borderLeft: "2px solid var(--color-border)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderLeftColor = "var(--color-accent)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderLeftColor = "var(--color-border)")}
+                  className="p-7 transition-colors"
+                  style={{ border: "1px solid var(--color-border)" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-border-h)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--color-border)")}
                 >
-                  <h4 className="text-lg font-bold">{item.role}</h4>
+                  <h3 className="text-2xl font-bold mb-2">{item.role}</h3>
                   <div
-                    className="flex gap-4 text-xs mt-0.5 mb-2"
+                    className="flex gap-4 text-xs mb-3"
                     style={{ fontFamily: "var(--font-mono)" }}
                   >
                     <span style={{ color: "var(--color-accent)" }}>{item.org}</span>
