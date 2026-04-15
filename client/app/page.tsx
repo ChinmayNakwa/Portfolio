@@ -730,6 +730,7 @@ export default function Portfolio() {
           <div>
             <SectionHeader label="Recognition" title="Achievements" />
             <div className="space-y-4 reveal">
+              {/* Pragyantra Achievement */}
               <div
                 className="p-7 transition-colors"
                 style={{ border: "1px solid var(--color-border)" }}
@@ -744,11 +745,11 @@ export default function Portfolio() {
                     border: "1px solid rgba(184,212,240,0.2)",
                   }}
                 >
-                  2nd Prize Winner
+                  1st Prize Winner
                 </span>
-                <h3 className="text-2xl font-bold mb-2">ETH Online '25</h3>
+                <h3 className="text-2xl font-bold mb-2">Pragyantra</h3>
                 <p className="text-sm leading-relaxed" style={{ color: "var(--color-secondary)" }}>
-                  Built BugChan — a decentralised bug-bounty platform at the ETH Online hackathon, placing 2nd.
+                  Developed a sophisticated AI-driven financial decision simulation engine for the Fintech category during this intensive 8-hour hackathon.
                 </p>
               </div>
 
@@ -773,6 +774,29 @@ export default function Portfolio() {
                   Won the GitHub Track at HackByte 4.0, a Major League Hacking sanctioned hackathon.
                 </p>
               </div>
+
+              <div
+                className="p-7 transition-colors"
+                style={{ border: "1px solid var(--color-border)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--color-border-h)")}
+                onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--color-border)")}
+              >
+                <span
+                  className="inline-block text-[10px] tracking-widest uppercase px-2.5 py-1 mb-4"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: "var(--color-accent)",
+                    border: "1px solid rgba(184,212,240,0.2)",
+                  }}
+                >
+                  2nd Prize Winner
+                </span>
+                <h3 className="text-2xl font-bold mb-2">ETH Online '25</h3>
+                <p className="text-sm leading-relaxed" style={{ color: "var(--color-secondary)" }}>
+                  Built BugChan — a decentralised bug-bounty platform at the ETH Online hackathon, placing 2nd.
+                </p>
+              </div>
+
             </div>
           </div>
 
