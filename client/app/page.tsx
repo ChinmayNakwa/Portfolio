@@ -149,27 +149,99 @@ function GrainOverlay() {
 
 function MouseFollower() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isMoving, setIsMoving] = useState(false);
+  const [trail, setTrail] = useState<{ x: number; y: number; id: number }[]>([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const trailIdRef = useRef(0);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
+      setIsMoving(true);
+      
+      // Add trail point
+      setTrail(prev => [...prev, { x: e.clientX, y: e.clientY, id: trailIdRef.current++ }].slice(-8));
+      
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setIsMoving(false), 100);
     };
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   return (
-    <div
-      className="fixed pointer-events-none z-40 mix-blend-difference transition-opacity duration-500"
-      style={{
-        left: position.x,
-        top: position.y,
-        width: "600px",
-        height: "600px",
-        transform: "translate(-50%, -50%)",
-        background: "radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)",
-      }}
-    />
+    <>
+      <style jsx global>{`
+        * { cursor: none !important; }
+      `}</style>
+      
+      {/* Glow effect */}
+      <div
+        className="fixed pointer-events-none z-40 mix-blend-difference"
+        style={{
+          left: position.x,
+          top: position.y,
+          width: "600px",
+          height: "600px",
+          transform: "translate(-50%, -50%)",
+          background: "radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)",
+        }}
+      />
+      
+      {/* Trail effect */}
+      {trail.map((point, index) => {
+        const opacity = (index + 1) / trail.length;
+        const scale = 0.3 + (opacity * 0.7);
+        return (
+          <div
+            key={point.id}
+            className="fixed pointer-events-none z-50"
+            style={{
+              left: point.x - 6,
+              top: point.y - 6,
+              width: "12px",
+              height: "12px",
+              background: "white",
+              borderRadius: "50%",
+              opacity: opacity * 0.4,
+              transform: `scale(${scale})`,
+              transition: "opacity 0.2s, transform 0.2s",
+            }}
+          />
+        );
+      })}
+      
+      {/* Expanding circle while moving */}
+      <div
+        className="fixed pointer-events-none z-50 transition-opacity duration-150"
+        style={{
+          left: position.x - 30,
+          top: position.y - 30,
+          width: "60px",
+          height: "60px",
+          border: "1px solid rgba(255,255,255,0.4)",
+          borderRadius: "50%",
+          opacity: isMoving ? 1 : 0,
+        }}
+      />
+      
+      {/* Custom cursor dot */}
+      <div
+        className="fixed pointer-events-none z-50"
+        style={{
+          left: position.x - 6,
+          top: position.y - 6,
+          width: "12px",
+          height: "12px",
+          border: "2px solid white",
+          borderRadius: "50%",
+          mixBlendMode: "difference",
+        }}
+      />
+    </>
   );
 }
 
@@ -535,21 +607,21 @@ export default function Portfolio() {
       {/* Contact */}
       <section className="py-32 px-6 border-t border-white/10">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-            <div className="lg:col-span-6">
-              <h2 className="text-[8vw] md:text-8xl font-black tracking-tighter leading-[0.9] mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
+            <div>
+              <h2 className="text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-8 max-w-md">
                 LET'S
                 <br />
                 BUILD
               </h2>
 
-              <p className="text-xl text-white/60 leading-relaxed max-w-md">
+              <p className="text-lg lg:text-xl text-white/60 leading-relaxed max-w-md">
                 Open to collaborations in GenAI, RAG systems, and deep learning research.
                 Whether it's a project, role, or just a conversation — reach out.
               </p>
             </div>
 
-            <div className="lg:col-span-6 space-y-px bg-white/10">
+            <div className="space-y-px bg-white/10">
               {[
                 { label: "Email", value: "29chinmaynakwa@gmail.com", href: "mailto:29chinmaynakwa@gmail.com" },
                 { label: "GitHub", value: "github.com/ChinmayNakwa", href: "https://github.com/ChinmayNakwa" },
@@ -561,10 +633,10 @@ export default function Portfolio() {
                   href={link.href}
                   target={link.href.startsWith("mailto") ? undefined : "_blank"}
                   rel="noopener noreferrer"
-                  className="flex justify-between items-center p-8 bg-[#0a0a0a] hover:bg-[#0f0f0f] transition-colors group"
+                  className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-4 p-6 sm:p-8 bg-[#0a0a0a] hover:bg-[#0f0f0f] transition-colors group"
                 >
-                  <span className="text-lg font-medium">{link.value}</span>
-                  <span className="text-sm tracking-[0.3em] uppercase text-white/40 group-hover:text-white/80 transition-colors flex items-center gap-2">
+                  <span className="text-base sm:text-lg font-medium break-all">{link.value}</span>
+                  <span className="text-xs sm:text-sm tracking-[0.3em] uppercase text-white/40 group-hover:text-white/80 transition-colors flex items-center gap-2 flex-shrink-0">
                     {link.label}
                     <ArrowUpRight size={14} />
                   </span>
