@@ -8,6 +8,7 @@ import {
   Users, Zap, Terminal, Database, Brain,
 } from "lucide-react";
 import Link from "next/link";
+import NavTube from "@/app/components/navtube/NavTube";
 
 /* ─────────────────────────────────────────────
    DATA
@@ -256,6 +257,7 @@ export default function Portfolio() {
     <div className="min-h-screen bg-[#0a0a0a] text-white font-sans antialiased">
       <GrainOverlay />
       <MouseFollower />
+      <NavTube />
 
       {/* Fixed Nav */}
       <motion.nav
@@ -276,7 +278,7 @@ export default function Portfolio() {
       </motion.nav>
 
       {/* Hero */}
-      <section className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
+      <section id="hero" className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
         {/* Background geometric shapes */}
         <div className="absolute inset-0 overflow-hidden opacity-5">
           <div className="absolute top-20 left-10 w-96 h-96 border border-white rotate-45" />
@@ -349,7 +351,7 @@ export default function Portfolio() {
       </section>
 
       {/* About */}
-      <section className="py-32 px-6 border-t border-white/10">
+      <section id="about" className="py-32 px-6 border-t border-white/10">
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
             <div className="lg:col-span-4">
@@ -388,7 +390,7 @@ export default function Portfolio() {
       </section>
 
       {/* Skills */}
-      <section className="py-32 px-6 border-t border-white/10 bg-[#0f0f0f]">
+      <section id="stack" className="py-32 px-6 border-t border-white/10 bg-[#0f0f0f]">
         <div className="max-w-[1400px] mx-auto">
           <h2 className="text-6xl font-black tracking-tighter mb-20">TECHNICAL STACK</h2>
 
@@ -416,7 +418,7 @@ export default function Portfolio() {
       </section>
 
       {/* Experience */}
-      <section className="py-32 px-6 border-t border-white/10">
+      <section id="experience" className="py-32 px-6 border-t border-white/10">
         <div className="max-w-[1400px] mx-auto">
           <h2 className="text-6xl font-black tracking-tighter mb-20">EXPERIENCE</h2>
 
@@ -464,7 +466,7 @@ export default function Portfolio() {
       </section>
 
       {/* Projects */}
-      <section className="py-32 px-6 border-t border-white/10 bg-[#0f0f0f]">
+      <section id="projects" className="py-32 px-6 border-t border-white/10 bg-[#0f0f0f]">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex justify-between items-end mb-20">
             <h2 className="text-6xl font-black tracking-tighter">SELECTED WORK</h2>
@@ -522,7 +524,7 @@ export default function Portfolio() {
       </section>
 
       {/* Publications */}
-      <section className="py-32 px-6 border-t border-white/10">
+      <section id="publications" className="py-32 px-6 border-t border-white/10">
         <div className="max-w-[1400px] mx-auto">
           <h2 className="text-6xl font-black tracking-tighter mb-20">PUBLICATIONS</h2>
 
@@ -559,7 +561,7 @@ export default function Portfolio() {
       </section>
 
       {/* Achievements + Leadership */}
-      <section className="py-32 px-6 border-t border-white/10 bg-[#0f0f0f]">
+      <section id="achievements" className="py-32 px-6 border-t border-white/10 bg-[#0f0f0f]">
         <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* Achievements */}
           <div>
@@ -605,7 +607,7 @@ export default function Portfolio() {
       </section>
 
       {/* Contact */}
-      <section className="py-32 px-6 border-t border-white/10">
+      <section id="contact" className="py-32 px-6 border-t border-white/10">
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
             <div>
